@@ -1,0 +1,66 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\{{modelName}};
+use Illuminate\Http\Request;
+use App\Helpers\SearchFilter;
+
+class {{modelName}}Controller extends Controller
+{
+    private $searchableField = ['name'];
+
+    public function index()
+    {
+        $r = request()->all();
+        if(count($r) > 0){
+            $records = SearchFilter::filterd(new {{modelName}}, $r, $this->searchableField);
+            SearchFilter::customPaginate($records, $r);
+        }else{
+            $records = {{modelName}}::orderBy('id', 'desc')->paginate(20);
+        }
+        return view('{{modelNamePluralLowerCase}}.index',['data' => $records]);
+    }
+
+    public function create()
+    {
+        return view('{{modelNamePluralLowerCase}}.create');
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => ['required', 'string', 'max:50']
+        ]);
+
+        $data = $request->all();
+        {{modelName}}::create($data);
+        return redirect()->route('{{modelNamePluralLowerCase}}.index')->with('message','Successfully create');
+    }
+
+    public function show({{modelName}} ${{modelNameSingularLowerCase}})
+    {
+        //
+    }
+
+    public function edit({{modelName}} ${{modelNameSingularLowerCase}})
+    {
+        return view('{{modelNamePluralLowerCase}}.edit',['data' => ${{modelNameSingularLowerCase}}]);
+    }
+
+    public function update(Request $request, {{modelName}} ${{modelNameSingularLowerCase}})
+    {
+        $request->validate([
+            'name' => ['required', 'string', 'max:50']
+        ]);
+        $data = $request->all();
+        ${{modelNameSingularLowerCase}}->update($data);
+        return redirect()->route('{{modelNamePluralLowerCase}}.index')->with('message','Successfully update');
+    }
+
+    public function destroy({{modelName}} ${{modelNameSingularLowerCase}})
+    {
+        ${{modelNameSingularLowerCase}}->delete();
+        return redirect()->route('{{modelNamePluralLowerCase}}.index')->with('message', "Successfully deleted");;
+    }
+}
