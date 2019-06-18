@@ -11,16 +11,22 @@ class BaseController extends Controller
     protected $searchableField;
     protected $model;
     protected $route;
+    protected $fields;
+    protected $colums;
 
     protected function index()
     {
         $records = SearchFilter::filterd(new $this->model, $this->searchableField);
-        return view("{$this->route}.index", $records);
+        $model = explode("\\", $this->model);
+        $records['columns'] = $this->columns;
+        $records['model'] = end($model);
+        return view("default.index", $records);
     }
 
     protected function create()
     {
-        return view("{$this->route}.create");
+        $model = explode("\\", $this->model);
+        return view("default.create",['model' => end($model), 'fields' => $this->fields]);
     }
 
     protected function store(Request $request)

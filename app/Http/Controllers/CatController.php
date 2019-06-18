@@ -11,5 +11,17 @@ class CatController extends BaseController
     $this->searchableField = ['name'];
     $this->model = "\App\Cat";
     $this->route = "cats";
+    $this->fields = [
+      [
+        'field' => 'name',
+        'type' => 'text'
+      ],
+      [
+        'field' => 'age',
+        'type' => 'number'
+      ]
+    ];
+    $this->columns = ['name'];
+
   }
 }
