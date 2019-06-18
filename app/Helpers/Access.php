@@ -8,7 +8,10 @@ class Access{
       'Menu',
       'Dashboard',
       'Users@crud',
-      'Notfound'
+      'Notfound',
+      //--section--
+			'Cats',
+			//--endsection--
     ];
     $access['U'] = [
       'Menu',

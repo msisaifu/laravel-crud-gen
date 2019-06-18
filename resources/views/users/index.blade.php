@@ -72,9 +72,9 @@
 							@if(Auth::user()->role == 'A' && Auth::id() != $record->id && !$record->deleted_at)
 								<a class="btn btn-xs btn-danger" href="#"
 										onclick="event.preventDefault();
-										document.getElementById('user-ban').submit();">
+										document.getElementById('user-ban-{{$record->id}}').submit();">
 									<i class="fas fa-ban"></i></a>
-									<form id="user-ban" action="{{route('users.destroy',$record->id)}}" method="POST" style="display: none;">
+									<form id="user-ban-{{$record->id}}" action="{{route('users.destroy',$record->id)}}" method="POST" style="display: none;">
 										@csrf
 										@method('DELETE')
 									</form>
@@ -83,9 +83,9 @@
 							@if(Auth::user()->role == 'A' && Auth::id() != $record->id && $record->deleted_at)
 								<a class="btn btn-xs btn-success" href="#"
 										onclick="event.preventDefault();
-										document.getElementById('user-unban').submit();">
+										document.getElementById('user-unban-{{$record->id}}').submit();">
 									<i class="fas fa-unlock"></i></a>
-									<form id="user-unban" action="{{route('users.destroy',$record->id)}}" method="POST" style="display: none;">
+									<form id="user-unban-{{$record->id}}" action="{{route('users.destroy',$record->id)}}" method="POST" style="display: none;">
 										@csrf
 										@method('DELETE')
 									</form>

@@ -16,11 +16,11 @@
 		$("#message").show(500)
 		$("#message").hide(500)
 	})
-	function deleteForm(){
+	function deleteForm(id){
 		var r = confirm('Are you sure to delete data?');
 		if(r){
 			event.preventDefault();
-			document.getElementById('delete-form').submit();
+			document.getElementById('delete-form-'+id).submit();
 		}
 	}
 </script>
@@ -33,7 +33,7 @@
 			<div class="card-header">
 				<form action="{{route('{{modelNamePluralLowerCase}}.index')}}" method="GET" style="inline">
 					<div class="input-group">
-						<input type="text" class="form-control" placeholder="Name" name="q">
+						<input type="text" class="form-control" placeholder="Name" name="q" value="{{$q??''}}">
 						<div class="input-group-append be-addon">
 							<button type="submit" class="btn btn-sm btn-danger">
 								<i class="fa fa-search  " style=""></i>
@@ -66,9 +66,9 @@
 								<a class="btn btn-xs btn-info" href="{{route('{{modelNamePluralLowerCase}}.edit',$record->id)}}">
 									<i class="fas fa-edit"></i></a>
 								<a class="btn btn-xs btn-danger" href="#"
-										onclick="deleteForm()">
+										onclick="deleteForm({{$record->id}})">
 									<i class="fas fa-trash"></i></a>
-									<form id="delete-form" action="{{route('{{modelNamePluralLowerCase}}.destroy',$record->id)}}" method="POST" style="display: none;">
+									<form id="delete-form-{{$record->id}}" action="{{route('{{modelNamePluralLowerCase}}.destroy',$record->id)}}" method="POST" style="display: none;">
 										@csrf
 										@method('DELETE')
 									</form>

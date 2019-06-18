@@ -4,30 +4,25 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use App\Helpers\SearchFilter;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Helpers\SearchFilter;
+use App\Http\Controllers\baseControllers\BaseController;
 
-class UserController extends Controller
+class UserController extends BaseController
 {
-    private $searchableField = ['name', 'email'];
+    protected $searchableField = ['name', 'email'];
 
     public function index()
     {
         $r = request()->all();
         $q = $r['q'] ?? '';
-        if(count($r) > 0){
-            $records = SearchFilter::filterd(new User, $r, $this->searchableField);
-        }else{
-            $records = User::orderBy('id', 'desc')->withTrashed()->paginate(20);
-        }
 
-        return view('users.index',['data' => $records, 'q' => $q]);
-    }
+        $model = SearchFilter::filterd(new User, $this->searchableField, true);
+        $records = $model->withTrashed()->orderBy('id', 'desc')->paginate(20);
+        $records = SearchFilter::customPaginate($records, $r);
 
-    public function create()
-    {
-        return view('users.create');
+        return view('users.index', ['data' => $records, 'q' => $q]);
     }
 
     public function store(Request $request)

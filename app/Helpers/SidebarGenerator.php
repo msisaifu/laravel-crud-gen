@@ -17,9 +17,10 @@ class SidebarGenerator{
     $this->menu = [
       'Menu|' => [
         'Dashboard|dashboard|fas fa-tachometer-alt' => [],
-        'Categories|categories.index|fas fa-user' => [],
-        'Cars|cars.index|fas fa-user' => [],
-        'Users|users.index|fas fa-user' => []
+        'Users|users.index|fas fa-user' => [],
+        //--menu--
+				'Cats|cats.index|fas fa-user' => [],
+				//--endmenu--
       ]
     ];
     $role = Auth::user()->role;

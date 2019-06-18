@@ -1,11 +1,11 @@
 @extends('layouts.app')
-@section('title', 'Cars')
-@section('pagetitle', 'All Cars')
+@section('title', 'Cats')
+@section('pagetitle', 'All Cats')
 @section('button')
-<a href="{{route('cars.create')}}" class="float-right btn btn-sm btn-space btn-primary">Add New</a>
+<a href="{{route('cats.create')}}" class="float-right btn btn-sm btn-space btn-primary">Add New</a>
 @endsection
 @section('breadcumb')
-  <li class="breadcrumb-item active" aria-current="page">Cars</li>
+  <li class="breadcrumb-item active" aria-current="page">Cats</li>
 @endsection
 @push('custom-js')
 <script>
@@ -16,11 +16,11 @@
 		$("#message").show(500)
 		$("#message").hide(500)
 	})
-	function deleteForm(){
+	function deleteForm(id){
 		var r = confirm('Are you sure to delete data?');
 		if(r){
 			event.preventDefault();
-			document.getElementById('delete-form').submit();
+			document.getElementById('delete-form-'+id).submit();
 		}
 	}
 </script>
@@ -31,9 +31,9 @@
 	<div class="col-md-12 col-sm-12 col-12">
 		<div class="card">
 			<div class="card-header">
-				<form action="{{route('cars.index')}}" method="GET" style="inline">
+				<form action="{{route('cats.index')}}" method="GET" style="inline">
 					<div class="input-group">
-						<input type="text" class="form-control" placeholder="Name" name="q">
+						<input type="text" class="form-control" placeholder="Name" name="q" value="{{$q??''}}">
 						<div class="input-group-append be-addon">
 							<button type="submit" class="btn btn-sm btn-danger">
 								<i class="fa fa-search  " style=""></i>
@@ -63,12 +63,12 @@
 							<th scope="row">{{$loop->iteration}}</th>
 							<td>{{$record->name}}</td>
 							<td>
-								<a class="btn btn-xs btn-info" href="{{route('cars.edit',$record->id)}}">
+								<a class="btn btn-xs btn-info" href="{{route('cats.edit',$record->id)}}">
 									<i class="fas fa-edit"></i></a>
 								<a class="btn btn-xs btn-danger" href="#"
-										onclick="deleteForm()">
+										onclick="deleteForm({{$record->id}})">
 									<i class="fas fa-trash"></i></a>
-									<form id="delete-form" action="{{route('cars.destroy',$record->id)}}" method="POST" style="display: none;">
+									<form id="delete-form-{{$record->id}}" action="{{route('cats.destroy',$record->id)}}" method="POST" style="display: none;">
 										@csrf
 										@method('DELETE')
 									</form>

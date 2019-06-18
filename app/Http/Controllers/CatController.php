@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\baseControllers\BaseController;
 
-class {{modelName}}Controller extends BaseController
+class CatController extends BaseController
 {
   public function __construct()
   {
     $this->searchableField = ['name'];
-    $this->model = "\App\{{modelName}}";
-    $this->route = "{{modelNamePluralLowerCase}}";
+    $this->model = "\App\Cat";
+    $this->route = "cats";
   }
 }
