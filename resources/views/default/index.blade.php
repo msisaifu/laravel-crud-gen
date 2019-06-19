@@ -54,7 +54,7 @@
 						<tr>
 								<th>#</th>
 								@foreach($columns as $val)
-								<th>{{$val}}</th>
+								<th>{{ucfirst($val)}}</th>
 								@endforeach
 								<th>Action</th>
 						</tr>

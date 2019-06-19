@@ -13,20 +13,19 @@ class BaseController extends Controller
     protected $route;
     protected $fields;
     protected $colums;
+    protected $section;
 
     protected function index()
     {
         $records = SearchFilter::filterd(new $this->model, $this->searchableField);
-        $model = explode("\\", $this->model);
         $records['columns'] = $this->columns;
-        $records['model'] = end($model);
+        $records['model'] = $this->section;
         return view("default.index", $records);
     }
 
     protected function create()
     {
-        $model = explode("\\", $this->model);
-        return view("default.create",['model' => end($model), 'fields' => $this->fields]);
+        return view("default.create",['model' => $this->section, 'fields' => $this->fields]);
     }
 
     protected function store(Request $request)
@@ -42,7 +41,11 @@ class BaseController extends Controller
     protected function edit($id)
     {
         $record = $this->model::findOrFail($id);
-        return view("{$this->route}.edit",['data' => $record]);
+        return view("default.edit",[
+            'data' => $record,
+            'model' => $this->section,
+            'fields' => $this->fields
+        ]);
     }
 
     protected function update(Request $request, $id)

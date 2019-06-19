@@ -22,15 +22,18 @@
           @csrf
 
           @foreach($fields as $field)
+          @php $val = $field['field'] @endphp
+
           <div class="form-group">
-            <label for="{{$field['field']}}" class="@error($field['field']) text-danger @enderror">
-              {{$field['title'] ?? ucfirst($field['field'])}}
-              @error($field['field'])
+            <label for="{{$val}}" class="@error($val) text-danger @enderror">
+              {{$field['title'] ?? ucfirst($val)}}
+              @error($val)
               <br>{{ $message }}
               @enderror
             </label>
-            <input id="{{$field['field']}}" type="{{$field['type']}}" class="form-control @error($field['field']) is-invalid @enderror" placeholder="{{$field['placeholder'] ?? ucfirst($field['field'])}}" name="{{$field['field']}}" value="{{ old($field['field']) }}">
+            <input id="{{$val}}" type="{{$field['type']}}" class="form-control @error($val) is-invalid @enderror" placeholder="{{$field['placeholder'] ?? ucfirst($val)}}" name="{{$val}}" value="{{ old($val) }}">
           </div>
+
           @endforeach
 
 
@@ -38,7 +41,7 @@
           <div class="row">
             <div class="col-sm-6 ml-1">
               <p class="text-left">
-                <button type="submit" class="btn btn-space btn-primary">Submit</button>
+                <button type="submit" class="btn btn-space btn-success">Submit</button>
               </p>
             </div>
           </div>

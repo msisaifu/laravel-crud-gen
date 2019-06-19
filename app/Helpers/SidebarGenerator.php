@@ -19,7 +19,6 @@ class SidebarGenerator{
         'Dashboard|dashboard|fas fa-tachometer-alt' => [],
         'Users|users.index|fas fa-user' => [],
         //--menu--
-				'Cats|cats.index|fas fa-user' => [],
 				//--endmenu--
       ]
     ];

@@ -10,7 +10,6 @@ class Access{
       'Users@crud',
       'Notfound',
       //--section--
-			'Cats',
 			//--endsection--
     ];
     $access['U'] = [

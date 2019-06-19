@@ -13,7 +13,7 @@ class CrudGenerator extends Command
      *
      * @var string
      */
-    protected $signature = "crud:generator
+    protected $signature = "crud:gen
     {name : Class (singular) for example User} {option?}";
 
     /**
@@ -38,40 +38,37 @@ class CrudGenerator extends Command
      *
      * @return mixed
      */
+    /**
+     * crud:gen User '
+     * "name","brand"|
+     * $table->string("name");$table->string("brand");'
+     *
+     *
+    */
     public function handle()
     {
         $name = $this->argument("name");
         $this->menu($name);
         $options = $this->argument("option");
         if($options){
-            $options = str_split($options);
-            $this->crudGenWithOption($name, $options);
-            return;
+            $options = explode('|', $options);
         }
-        $this->crudGen($name);
-    }
 
-    protected function crudGen($name){
-        $this->controller($name);
-        $this->model($name);
-        $this->migration($name);
-        $this->create($name);
-        $this->index($name);
-        $this->edit($name);
-    }
+        $this->controller($name, $options[0]?? "'name'");
+        $this->model($name, $options[0]?? "'name'");
+        $this->migration($name, $options[1]?? '$table->string("name");');
 
-    protected function crudGenWithOption($name, $options){
-        $this->controller($name);
-        $this->model($name);
-        $this->migration($name);
-        if(in_array("c", $options)){
-            $this->create($name);
-        }
-        if(in_array("r", $options)){
-            $this->index($name);
-        }
-        if(in_array("u", $options)){
-            $this->edit($name);
+        if($options[2]){
+            $views = str_split($options[2]);
+            if(in_array("c", $views)){
+                $this->create($name);
+            }
+            if(in_array("r", $views)){
+                $this->index($name);
+            }
+            if(in_array("u", $views)){
+                $this->edit($name);
+            }
         }
     }
 
@@ -80,16 +77,19 @@ class CrudGenerator extends Command
         return file_get_contents(resource_path("stubs/$type.stub"));
     }
 
-    protected function migration($name)
+    protected function migration($name, $tableSchema)
     {
+        $tableSchema = rtrim(str_replace(";", ";\n\t\t\t", $tableSchema));
         $modelTemplate = str_replace(
             [
                 "{{modelNamePluralLowerCase}}",
-                "{{modelNamePluralUcCase}}"
+                "{{modelNamePluralUcCase}}",
+                "{{tableSchema}}"
             ],
             [
                 strtolower(str_plural($name)),
-                ucfirst(str_plural($name))
+                ucfirst(str_plural($name)),
+                $tableSchema
             ],
             $this->getStub("Migration")
         );
@@ -121,11 +121,17 @@ class CrudGenerator extends Command
         $this->call('migrate');
     }
 
-    protected function model($name)
+    protected function model($name, $columns = "'name'")
     {
         $baseModelTemplate = str_replace(
-            ["{{modelName}}"],
-            [$name],
+            [
+                "{{modelName}}",
+                "{{filableField}}"
+            ],
+            [
+                $name,
+                $columns
+            ],
             $this->getStub("BaseModel")
         );
 
@@ -135,30 +141,34 @@ class CrudGenerator extends Command
             $this->getStub("Model")
         );
 
-        if(file_exists(app_path("/baseModels/{$name}.php"))){
-            $this->error("{$name} model already exists");
-            return;
-        }
 
         if (!is_dir(app_path("baseModels"))) {
             mkdir(app_path("baseModels"), 0777, true);
         }
 
         file_put_contents(app_path("/baseModels/{$name}.php"), $baseModelTemplate);
+
+        if(file_exists(app_path("/{$name}.php"))){
+            $this->error("{$name} model already exists");
+            return;
+        }
+
         file_put_contents(app_path("/{$name}.php"), $modelTemplate);
         $this->info("{$name} model file created successfully");
     }
 
-    protected function controller($name)
+    protected function controller($name,  $columns = "'name'")
     {
         $controllerTemplate = str_replace(
             [
                 "{{modelName}}",
-                "{{modelNamePluralLowerCase}}"
+                "{{modelNamePluralLowerCase}}",
+                "{{columnName}}"
             ],
             [
                 $name,
-                strtolower(str_plural($name))
+                strtolower(str_plural($name)),
+                $columns
             ],
             $this->getStub("Controller")
         );

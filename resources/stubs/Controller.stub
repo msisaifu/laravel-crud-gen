@@ -11,5 +11,15 @@ class {{modelName}}Controller extends BaseController
     $this->searchableField = ['name'];
     $this->model = "\App\{{modelName}}";
     $this->route = "{{modelNamePluralLowerCase}}";
+    $this->section = "{{modelName}}";
+    /**
+     * options[
+     * field, type, title, placeholder
+     * ]
+     */
+    $this->fields = [
+
+    ];
+    $this->columns = [{{columnName}}];
   }
 }
